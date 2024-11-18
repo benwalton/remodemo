@@ -132,7 +132,4 @@ If there are no transactions an empty array is sent
 * When calculating transactions with limits I included the current transaction. If an alert should be flagged on the 5th transaction for example, I count the current transaction and look for 4 in the database.
 * The repository method `get_recent_transactions_for_user` could likely be just a count query, I left it like this as I would imagine it would be used for more than counting in a real application.
 * For simplicity, the configuration for the rules is in `process_rules.py` where they are used. The downside being that the code needs to change and the server restarted to update rules. In a more mature system these would live somewhere better like a database.
-
-
-
-
+* There is no authentication in the system. It is assumed this would be some sort of microservice where the authentication would be handled at the network layer.
