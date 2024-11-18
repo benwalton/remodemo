@@ -12,6 +12,7 @@ def remodemo_app():
     app.include_router(transaction_router.router)
 
     # TODO DB INDEXES
+    # TODO ERRORS
 
     return app
 

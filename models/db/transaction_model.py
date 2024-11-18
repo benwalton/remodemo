@@ -29,3 +29,15 @@ class TransactionModel(BaseModel):
     type: TransactionType
     is_suspicious: bool
     suspicious_reasons: List[SuspiciousReasonsType]
+
+    def to_dict_json(self) -> dict:
+        return {
+            "id": str(self.id),
+            "user_id": self.user_id,
+            "amount": self.amount,
+            "currency": self.currency,
+            "timestamp": self.timestamp,
+            "type": self.type.value,
+            "is_suspicious": self.is_suspicious,
+            "suspicious_reasons": [r.value for r in self.suspicious_reasons]
+        }

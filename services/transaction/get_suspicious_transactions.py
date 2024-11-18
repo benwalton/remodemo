@@ -14,5 +14,6 @@ class GetSuspiciousTransactions:
         self.db = database or db
         self.transaction_repo = TransactionRepository(db=self.db)
 
-    async def __call__(self) -> List[TransactionModel]:
-        return await self.transaction_repo.get_suspicious_transactions_for_user(user_id=self.user_id)
+    async def __call__(self) -> List[dict]:
+        transactions = await self.transaction_repo.get_suspicious_transactions_for_user(user_id=self.user_id)
+        return [t.to_dict_json() for t in transactions]

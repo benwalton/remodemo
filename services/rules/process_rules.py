@@ -30,7 +30,7 @@ class ProcessRules:
         database: Optional[AsyncIOMotorDatabase] = None,
     ):
         self.transaction = transaction
-        self.db = database or db
+        self.db = db if database is None else database
         self.transaction_repo = TransactionRepository(db=self.db)
 
     async def __call__(self) -> List[str]:

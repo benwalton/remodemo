@@ -14,7 +14,9 @@ class TransactionRepository:
         self._collection: AsyncIOMotorCollection = db["transaction"]
 
     async def get_transaction(self, id: PyObjectId) -> TransactionModel:
-        return await self._collection.find_one({"_id": id})
+        transaction = await self._collection.find_one({"_id": id})
+        if transaction:
+            return TransactionModel(**transaction)
 
     async def insert_transaction(self, transaction: dict) -> TransactionModel:
         inserted_transaction = await self._collection.insert_one(transaction)
@@ -40,8 +42,8 @@ class TransactionRepository:
         self, user_id: str
     ) -> List[TransactionModel]:
         transactions = (
-            await self._collection.find({"user_id": user_id})
-            .sort(("timestamp", 1))
+            await self._collection.find({"user_id": user_id, "is_suspicious": True})
+            .sort("timestamp")
             .to_list(None)
         )
         return [TransactionModel(**t) for t in transactions]

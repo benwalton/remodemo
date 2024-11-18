@@ -19,14 +19,16 @@ class NewTransaction:
         self.db = database or db
         self.transaction_repo = TransactionRepository(db=self.db)
 
-    async def __call__(self) -> TransactionModel:
+    async def __call__(self) -> dict:
         suspicious_reasons = await ProcessRules(
             transaction=self.transaction, database=self.db
         )()
-        return await self.transaction_repo.insert_transaction(
+        transaction = await self.transaction_repo.insert_transaction(
             {
                 **self.transaction.dict(),
                 "is_suspicious": len(suspicious_reasons) != 0,
                 "suspicious_reasons": suspicious_reasons,
             }
         )
+        return transaction.to_dict_json()
+

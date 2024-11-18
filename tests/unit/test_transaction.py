@@ -234,3 +234,6 @@ class TestTransaction(unittest.IsolatedAsyncioTestCase):
             new_trans_model.suspicious_reasons,
             [SuspiciousReasonsType.RAPID_TRANSFERS],
         )
+
+    def test_multiple_suspicious_reasons(self):
+        pass

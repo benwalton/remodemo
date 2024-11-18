@@ -11,7 +11,7 @@ class TransactionRouter:
     def router(self) -> APIRouter:
         api_router = APIRouter()
 
-        @api_router.post("/transactions")
+        @api_router.post("/transactions", status_code=201)
         async def new_transaction(body: NewTransactionPayload):
             return await NewTransaction(transaction=body)()
 
