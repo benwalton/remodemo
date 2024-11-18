@@ -22,9 +22,3 @@ async def ensure_indexes():
     await db.transactions.create_index("is_suspicious", background=True)
     await db.transactions.create_index("type", background=True)
     await db.transactions.create_index("amount", background=True)
-
-
-# Call the index creation function at the time of initialization
-import asyncio
-
-asyncio.run(ensure_indexes())

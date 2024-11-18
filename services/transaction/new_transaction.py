@@ -25,7 +25,7 @@ class NewTransaction:
         )()
         transaction = await self.transaction_repo.insert_transaction(
             {
-                **self.transaction.dict(),
+                **self.transaction.model_dump(),
                 "is_suspicious": len(suspicious_reasons) != 0,
                 "suspicious_reasons": suspicious_reasons,
             }
