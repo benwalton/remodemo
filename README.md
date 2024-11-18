@@ -20,7 +20,16 @@ And confirm everything is running with
 
     docker ps
 
-This should show mongo and redis up and running. 
+This should show mongo and redis up and running.
+
+Config defaults set in config.py can be overridden by creating a custom `.env` file such as
+
+```
+MONGO_USER=someuser
+MONGO_PASSWORD=somepassword
+MONGO_DATABASE=somedbname
+MONGO_CONNECTION_STRING=mongodb://localhost
+```
 
 ### Running the application ###
 
@@ -30,6 +39,17 @@ The application can be started by running
     python main.py
 
 From within the project directory. 
+
+## Running Tests ##
+
+The project contains a test suite. This can be ran by running
+
+    python -m pytest
+
+From within a poetry shell `poetry shell` starts the shell as above
+
+The tests are all unit tests and so don't require docker to run.
+
 
 ### Adding data to the running version ###
 
