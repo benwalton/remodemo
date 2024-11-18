@@ -9,7 +9,7 @@ from models.payloads.new_transaction_payload import NewTransactionPayload
 from repositories.transaction_repository import TransactionRepository
 from redis.asyncio import Redis
 
-settings =config.get_settings()
+settings = config.get_settings()
 
 
 FLAG_AMOUNT_THRESHOLD = 10000

@@ -31,4 +31,3 @@ class NewTransaction:
             }
         )
         return transaction.to_dict_json()
-

@@ -39,5 +39,5 @@ class TransactionModel(BaseModel):
             "timestamp": self.timestamp,
             "type": self.type.value,
             "is_suspicious": self.is_suspicious,
-            "suspicious_reasons": [r.value for r in self.suspicious_reasons]
+            "suspicious_reasons": [r.value for r in self.suspicious_reasons],
         }

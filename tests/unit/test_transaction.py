@@ -15,7 +15,6 @@ from services.transaction.new_transaction import NewTransaction
 
 class TestTransaction(unittest.IsolatedAsyncioTestCase):
 
-
     @mock.patch("services.rules.process_rules.redis")
     async def test_new_transaction(self, _redis):
         # Ignore caching for now
@@ -191,7 +190,10 @@ class TestTransaction(unittest.IsolatedAsyncioTestCase):
     @mock.patch("services.rules.process_rules.redis")
     async def test_new_transaction_frequent_small_cache(self, _redis):
         # Return True from the redis query
-        _redis.get.side_effect = [True, False] # Will return True for frequent small and False for rapid
+        _redis.get.side_effect = [
+            True,
+            False,
+        ]  # Will return True for frequent small and False for rapid
 
         db = AsyncMongoMockClient()["tests"]
 
@@ -214,7 +216,10 @@ class TestTransaction(unittest.IsolatedAsyncioTestCase):
 
     @mock.patch("services.rules.process_rules.redis")
     async def test_new_transaction_rapid_transactions_cache(self, _redis):
-        _redis.get.side_effect = [False, True]  # Will return False for frequent small and True for rapid
+        _redis.get.side_effect = [
+            False,
+            True,
+        ]  # Will return False for frequent small and True for rapid
 
         db = AsyncMongoMockClient()["tests"]
 
@@ -235,5 +240,49 @@ class TestTransaction(unittest.IsolatedAsyncioTestCase):
             [SuspiciousReasonsType.RAPID_TRANSFERS],
         )
 
-    def test_multiple_suspicious_reasons(self):
-        pass
+    @mock.patch("services.rules.process_rules.redis")
+    async def test_multiple_suspicious_reasons(self, _redis):
+        _redis.get.return_value = None
+
+        db = AsyncMongoMockClient()["tests"]
+
+        now = datetime.datetime.utcnow()
+        the_dates = []
+        for i in range(3):
+            the_dates.append(now - datetime.timedelta(seconds=20 * i))
+
+        # Create 2 transaction, they should all pass
+        for i in range(2):
+            new_transaction_payload = NewTransactionPayload(
+                user_id="user1234",
+                amount="10000",
+                currency="USD",
+                timestamp=the_dates.pop(),
+                type="TRANSFER",
+            )
+            new_trans = await NewTransaction(
+                transaction=new_transaction_payload, database=db
+            )()
+            new_trans_model = TransactionModel(**new_trans)
+            self.assertEqual(new_trans_model.is_suspicious, False)
+
+        # 3rd one should be too much
+        new_transaction_payload = NewTransactionPayload(
+            user_id="user1234",
+            amount="10001",  # Price above threshold
+            currency="USD",
+            timestamp=the_dates.pop(),
+            type="TRANSFER",
+        )
+        new_trans = await NewTransaction(
+            transaction=new_transaction_payload, database=db
+        )()
+        new_trans_model = TransactionModel(**new_trans)
+        self.assertEqual(new_trans_model.is_suspicious, True)
+        self.assertEqual(
+            new_trans_model.suspicious_reasons,
+            [
+                SuspiciousReasonsType.HIGH_VOLUME_TRANSACTION,
+                SuspiciousReasonsType.RAPID_TRANSFERS,
+            ],
+        )
