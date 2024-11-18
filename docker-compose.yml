@@ -1,0 +1,21 @@
+version: "3.0"
+
+services:
+  mongo:
+    image: mongo:5.0.14-focal
+    environment:
+      - MONGO_INITDB_DATABASE=remodemo
+      - MONGO_INITDB_ROOT_USERNAME=benuser
+      - MONGO_INITDB_ROOT_PASSWORD=password007
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
+    ports:
+      - "27017-27019:27017-27019"
+
+  redis:
+    image: redis:5.0.5-alpine
+    volumes:
+      - ./redis-data:/data
+    ports:
+      - "6379:6379"
