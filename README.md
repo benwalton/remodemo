@@ -129,7 +129,9 @@ GET /transactions/suspicious/{user_id}
 
 ## Assumptions Made ##
 
-In the specification it eas mentioned to "Flag a user" rather than "Flag a transaction" however I thought it best to flag the individual transaction due to it making more sense and having context. The user is technically flagged if they have recent suspicious activity that can be found from calling the suspicious transactions endpoint for that user.
+* In the specification it eas mentioned to "Flag a user" rather than "Flag a transaction" however I thought it best to flag the individual transaction due to it making more sense and having context. The user is technically flagged if they have recent suspicious activity that can be found from calling the suspicious transactions endpoint for that user.
+* When calculating transactions with limits I included the current transaction. If an alert should be flagged on the 5th transaction for example, I count the current transaction and look for 4 in the database.
+
 
 
 
