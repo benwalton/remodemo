@@ -110,7 +110,7 @@ If the sent transaction does not meet the request as described above an HTTP 422
 
 GET /transactions/suspicious/{user_id}
 
-* RESPONSE *
+RESPONSE
 
     HTTP 200 OK
     
@@ -124,8 +124,7 @@ GET /transactions/suspicious/{user_id}
     is_suspicious - Boolean 
     suspicious_reasons - An array of values, each value is one of HIGH_VOLUME_TRANSACTION, FREQUENT_SMALL_TRANSACTIONS, FREQUENT_SMALL_TRANSACTIONS  
 
-    If there are no transactions an empty array is sent
-
+If there are no transactions an empty array is sent
 
 ## Assumptions Made ##
 
