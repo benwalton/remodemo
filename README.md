@@ -129,9 +129,10 @@ GET /transactions/suspicious/{user_id}
 
 ## Assumptions Made ##
 
-* In the specification it eas mentioned to "Flag a user" rather than "Flag a transaction" however I thought it best to flag the individual transaction due to it making more sense and having context. The user is technically flagged if they have recent suspicious activity that can be found from calling the suspicious transactions endpoint for that user.
+* In the specification it mentions to "Flag a user" rather than "Flag a transaction" however I thought it best to flag the individual transaction due to it making more sense and having context. The user is technically flagged if they have recent suspicious activity that can be found from calling the suspicious transactions endpoint for that user.
 * When calculating transactions with limits I included the current transaction. If an alert should be flagged on the 5th transaction for example, I count the current transaction and look for 4 in the database.
 * The repository method `get_recent_transactions_for_user` could likely be just a count query, I left it like this as I would imagine it would be used for more than counting in a real application.
+* For simplicity, the configuration for the rules is in `process_rules.py` where they are used. The downside being that the code needs to change and the server restarted to update rules. In a more mature system these would live somewhere better like a database.
 
 
 
